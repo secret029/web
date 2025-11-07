@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect - Social Network</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f0f2f5;
+        }
+
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .auth-box {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .auth-box h1 {
+            color: #1877f2;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 12px;
+            border: 1px solid #dddfe2;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #1877f2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            background: #166fe5;
+        }
+
+        .link-btn {
+            background: none;
+            color: #1877f2;
+            font-size: 14px;
+            font-weight: normal;
+        }
+
+        .app-container {
+            display: none;
+        }
+
+        .navbar {
+            background: white;
+            padding: 10px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar h2 {
+            color: #1877f2;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            padding: 8px 16px;
+            width: auto;
+            font-size: 14px;
+            background: #e4e6e9;
+            color: #050505;
+        }
+
+        .nav-btn:hover {
+            background: #d8dadf;
+        }
+
+        .nav-btn.active {
+            background: #1877f2;
+            color: white;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        .main-content {
+            max-width: 680px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .create-post {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .create-post textarea {
+            width: 100%;
+            border: none;
+            resize: none;
+            font-size: 15px;
+            padding: 10px;
+            min-height: 80px;
+            margin-bottom: 10px;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .post-actions button {
+            flex: 1;
+            padding: 10px;
+            background: #f0f2f5;
+            color: #606770;
+            font-weight: normal;
+        }
+
+        .feed {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .post {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+
+        .post-header {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .post-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .post-info {
+            flex: 1;
+        }
+
+        .post-author {
+            font-weight: bold;
+            color: #050505;
+        }
+
+        .post-date {
+            color: #65676b;
+            font-size: 13px;
+        }
+
+        .post-content {
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .post-media img, .post-media video {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .post-reactions {
+            display: flex;
+            gap: 15px;
+            padding: 10px 0;
+            border-top: 1px solid #e4e6e9;
+            border-bottom: 1px solid #e4e6e9;
+            margin-bottom: 10px;
+        }
+
+        .reaction-btn {
+            background: none;
+            color: #65676b;
+            padding: 5px 10px;
+            width: auto;
+            font-weight: normal;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .reaction-btn:hover {
+            background: #f0f2f5;
+        }
+
+        .reaction-btn.active {
+            color: #1877f2;
+        }
+
+        .comments {
+            margin-top: 10px;
+        }
+
+        .comment {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .comment-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .comment-content {
+            background: #f0f2f5;
+            padding: 8px 12px;
+            border-radius: 18px;
+            flex: 1;
+        }
+
+        .comment-author {
+            font-weight: bold;
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+
+        .comment-text {
+            font-size: 14px;
+        }
+
+        .comment-input {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .comment-input input {
+            flex: 1;
+            margin: 0;
+            border-radius: 18px;
+            padding: 8px 12px;
+        }
+
+        .friends-page, .messages-page, .profile-page {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .friend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-bottom: 1px solid #e4e6e9;
+        }
+
+        .friend-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .friend-info {
+            flex: 1;
+        }
+
+        .friend-actions button {
+            width: auto;
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        .chat-container {
+            display: flex;
+            height: 500px;
+            gap: 10px;
+        }
+
+        .chat-list {
+            width: 300px;
+            background: white;
+            border-radius: 8px;
+            overflow-y: auto;
+        }
+
+        .chat-item {
+            padding: 15px;
+            border-bottom: 1px solid #e4e6e9;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-item:hover {
+            background: #f0f2f5;
+        }
+
+        .chat-item.active {
+            background: #e7f3ff;
+        }
+
+        .chat-window {
+            flex: 1;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            padding: 15px;
+            border-bottom: 1px solid #e4e6e9;
+            font-weight: bold;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message.own {
+            align-items: flex-end;
+        }
+
+        .message-bubble {
+            background: #f0f2f5;
+            padding: 8px 12px;
+            border-radius: 18px;
+            max-width: 70%;
+            word-wrap: break-word;
+        }
+
+        .message.own .message-bubble {
+            background: #1877f2;
+            color: white;
+        }
+
+        .message-media {
+            max-width: 300px;
+            border-radius: 8px;
+            margin-top: 5px;
+        }
+
+        .chat-input {
+            padding: 15px;
+            border-top: 1px solid #e4e6e9;
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            margin: 0;
+        }
+
+        .chat-input button {
+            width: auto;
+            padding: 10px 20px;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-avatar-large {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 15px;
+            display: block;
+        }
+
+        .profile-info {
+            margin-bottom: 20px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e4e6e9;
+        }
+
+        .edit-profile input, .edit-profile select {
+            margin-bottom: 15px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 20px;
+        }
+
+        .close-modal {
+            background: #e4e6e9;
+            color: #050505;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .gender-select {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .gender-select label {
+            border: 1px solid #dddfe2;
+            padding: 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .file-btn {
+            background: #f0f2f5;
+            color: #606770;
+            padding: 10px;
+            width: auto;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .badge {
+            background: #1877f2;
+            color: white;
+            border-radius: 10px;
+            padding: 2px 8px;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="authPage" class="auth-container">
+        <div class="auth-box">
+            <div id="loginForm">
+                <h1>Connect</h1>
+                <p>Connect with friends and the world around you.</p>
+                <input type="text" id="loginName" placeholder="Username">
+                <input type="password" id="loginPass" placeholder="Password">
+                <button onclick="login()">Log In</button>
+                <button class="link-btn" onclick="showSignup()">Create New Account</button>
+            </div>
+
+            <div id="signupForm" class="hidden">
+                <h1>Sign Up</h1>
+                <p>Create your account</p>
+                <input type="text" id="signupName" placeholder="Full Name">
+                <input type="password" id="signupPass" placeholder="Password">
+                <input type="date" id="signupBday" placeholder="Birthday">
+                <div class="gender-select">
+                    <label>
+                        <input type="radio" name="gender" value="Male" checked> Male
+                    </label>
+                    <label>
+                        <input type="radio" name="gender" value="Female"> Female
+                    </label>
+                </div>
+                <button onclick="signup()">Sign Up</button>
+                <button class="link-btn" onclick="showLogin()">Already have an account?</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="appPage" class="app-container">
+        <nav class="navbar">
+            <h2>Connect</h2>
+            <div class="user-info">
+                <div class="nav-buttons">
+                    <button class="nav-btn active" onclick="showPage('feed')">🏠 Home</button>
+                    <button class="nav-btn" onclick="showPage('friends')">👥 Friends</button>
+                    <button class="nav-btn" onclick="showPage('messages')">💬 Messages<span id="msgBadge"></span></button>
+                </div>
+                <img id="navAvatar" class="user-avatar" src="" alt="Avatar" onclick="showPage('profile')">
+                <button class="nav-btn" onclick="logout()">Logout</button>
+            </div>
+        </nav>
+
+        <div class="main-content">
+            <div id="feedPage">
+                <div class="create-post">
+                    <textarea id="postText" placeholder="What's on your mind?"></textarea>
+                    <div id="mediaPreview"></div>
+                    <div class="post-actions">
+                        <button onclick="document.getElementById('imageInput').click()">📷 Photo</button>
+                        <button onclick="document.getElementById('videoInput').click()">🎥 Video</button>
+                        <button onclick="createPost()">Post</button>
+                    </div>
+                    <input type="file" id="imageInput" accept="image/*" style="display:none" onchange="previewMedia(this, 'image')">
+                    <input type="file" id="videoInput" accept="video/*" style="display:none" onchange="previewMedia(this, 'video')">
+                </div>
+                <div id="feed" class="feed"></div>
+            </div>
+
+            <div id="friendsPage" class="friends-page hidden">
+                <h2>Friends</h2>
+                <div id="friendsList"></div>
+                <h2 style="margin-top: 30px;">Add Friends</h2>
+                <div id="usersList"></div>
+            </div>
+
+            <div id="messagesPage" class="messages-page hidden">
+                <h2>Messages</h2>
+                <button onclick="showCreateGroupChat()" style="margin-bottom: 20px; width: auto; padding: 10px 20px;">➕ Create Group Chat</button>
+                <div class="chat-container">
+                    <div class="chat-list" id="chatList"></div>
+                    <div class="chat-window" id="chatWindow">
+                        <div class="chat-header" id="chatHeader">Select a chat</div>
+                        <div class="chat-messages" id="chatMessages"></div>
+                        <div class="chat-input" id="chatInputArea" style="display:none;">
+                            <input type="file" id="chatFileInput" accept="image/*,video/*" style="display:none" onchange="handleChatFile(this)">
+                            <button class="file-btn" onclick="document.getElementById('chatFileInput').click()">📎</button>
+                            <input type="text" id="chatInput" placeholder="Type a message...">
+                            <button onclick="sendMessage()">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="profilePage" class="profile-page hidden">
+                <div class="profile-header">
+                    <img id="profileAvatar" class="profile-avatar-large" src="" alt="Avatar">
+                    <h2 id="profileName"></h2>
+                </div>
+                <div class="profile-info">
+                    <div class="info-row">
+                        <strong>Birthday:</strong>
+                        <span id="profileBday"></span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Gender:</strong>
+                        <span id="profileGender"></span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Friends:</strong>
+                        <span id="profileFriends"></span>
+                    </div>
+                </div>
+                <button onclick="showEditProfile()">Edit Profile</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h2>Edit Profile</h2>
+            <div class="edit-profile">
+                <label>Profile Picture:</label>
+                <input type="file" id="editAvatar" accept="image/*" onchange="previewAvatar(this)">
+                <img id="avatarPreview" style="width: 100px; height: 100px; border-radius: 50%; margin: 10px 0; display: none;">
+                <label>Name:</label>
+                <input type="text" id="editName">
+                <label>Birthday:</label>
+                <input type="date" id="editBday">
+                <label>Gender:</label>
+                <select id="editGender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+                <button onclick="saveProfile()">Save Changes</button>
+                <button class="close-modal" onclick="closeModal('editModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="groupModal" class="modal">
+        <div class="modal-content">
+            <h2>Create Group Chat</h2>
+            <input type="text" id="groupName" placeholder="Group Name">
+            <div id="friendCheckList"></div>
+            <button onclick="createGroupChat()">Create Group</button>
+            <button class="close-modal" onclick="closeModal('groupModal')">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        let appData = {
+            users: {},
+            posts: [],
+            chats: [],
+            currentUser: null,
+            currentChat: null,
+            currentMedia: null
+        };
+
+        function loadData() {
+            const saved = localStorage.getItem('connectAppData');
+            if (saved) {
+                appData = JSON.parse(saved);
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('connectAppData', JSON.stringify(appData));
+        }
+
+        loadData();
+
+        function showSignup() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('signupForm').classList.remove('hidden');
+        }
+
+        function showLogin() {
+            document.getElementById('signupForm').classList.add('hidden');
+            document.getElementById('loginForm').classList.remove('hidden');
+        }
+
+        function signup() {
+            const name = document.getElementById('signupName').value.trim();
+            const pass = document.getElementById('signupPass').value;
+            const bday = document.getElementById('signupBday').value;
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+
+            if (!name || !pass || !bday) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (appData.users[name.toLowerCase()]) {
+                alert('Username already exists');
+                return;
+            }
+
+            appData.users[name.toLowerCase()] = {
+                name: name,
+                password: pass,
+                birthday: bday,
+                gender: gender,
+                avatar: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><circle cx="50" cy="50" r="50" fill="%231877f2"/><text x="50" y="50" text-anchor="middle" dy=".3em" fill="white" font-size="40" font-family="Arial">' + name[0].toUpperCase() + '</text></svg>',
+                friends: []
+            };
+
+            saveData();
+            alert('Account created! You can now log in.');
+            showLogin();
+        }
+
+        function login() {
+            const name = document.getElementById('loginName').value.trim();
+            const pass = document.getElementById('loginPass').value;
+
+            const user = appData.users[name.toLowerCase()];
+            if (user && user.password === pass) {
+                appData.currentUser = name.toLowerCase();
+                saveData();
+                showApp();
+            } else {
+                alert('Invalid username or password');
+            }
+        }
+
+        function logout() {
+            appData.currentUser = null;
+            document.getElementById('authPage').style.display = 'flex';
+            document.getElementById('appPage').style.display = 'none';
+        }
+
+        function showApp() {
+            const user = appData.users[appData.currentUser];
+            document.getElementById('authPage').style.display = 'none';
+            document.getElementById('appPage').style.display = 'block';
+            document.getElementById('navAvatar').src = user.avatar;
+            showPage('feed');
+        }
+
+        function showPage(page) {
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('feedPage').classList.add('hidden');
+            document.getElementById('friendsPage').classList.add('hidden');
+            document.getElementById('messagesPage').classList.add('hidden');
+            document.getElementById('profilePage').classList.add('hidden');
+
+            if (page === 'feed') {
+                document.getElementById('feedPage').classList.remove('hidden');
+                document.querySelector('.nav-btn').classList.add('active');
+                displayFeed();
+            } else if (page === 'friends') {
+                document.getElementById('friendsPage').classList.remove('hidden');
+                document.querySelectorAll('.nav-btn')[1].classList.add('active');
+                displayFriends();
+            } else if (page === 'messages') {
+                document.getElementById('messagesPage').classList.remove('hidden');
+                document.querySelectorAll('.nav-btn')[2].classList.add('active');
+                displayChats();
+            } else if (page === 'profile') {
+                document.getElementById('profilePage').classList.remove('hidden');
+                displayProfile();
+            }
+        }
+
+        function previewMedia(input, type) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    appData.currentMedia = { type: type, data: e.target.result };
+                    const preview = document.getElementById('mediaPreview');
+                    if (type === 'image') {
+                        preview.innerHTML = `<img src="${e.target.result}" style="max-width:100%; border-radius:8px;">`;
+                    } else {
+                        preview.innerHTML = `<video src="${e.target.result}" controls style="max-width:100%; border-radius:8px;"></video>`;
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function createPost() {
+            const text = document.getElementById('postText').value.trim();
+            if (!text && !appData.currentMedia) {
+                alert('Please write something or add media');
+                return;
+            }
+
+            const post = {
+                id: Date.now(),
+                author: appData.currentUser,
+                text: text,
+                media: appData.currentMedia,
+                date: new Date().toLocaleString(),
+                reactions: { like: [], love: [], haha: [] },
+                comments: []
+            };
+
+            appData.posts.unshift(post);
+            document.getElementById('postText').value = '';
+            document.getElementById('mediaPreview').innerHTML = '';
+            appData.currentMedia = null;
+            saveData();
+            displayFeed();
+        }
+
+        function reactToPost(postId, reaction) {
+            const post = appData.posts.find(p => p.id === postId);
+            if (!post) return;
+
+            Object.keys(post.reactions).forEach(r => {
+                post.reactions[r] = post.reactions[r].filter(u => u !== appData.currentUser);
+            });
+
+            if (!post.reactions[reaction].includes(appData.currentUser)) {
+                post.reactions[reaction].push(appData.currentUser);
+            }
+
+            saveData();
+            displayFeed();
+        }
+
+        function addComment(postId) {
+            const input = document.getElementById(`comment-${postId}`);
+            const text = input.value.trim();
+            if (!text) return;
+
+            const post = appData.posts.find(p => p.id === postId);
+            if (!post) return;
+
+            post.comments.push({
+                author: appData.currentUser,
+                text: text,
+                date: new Date().toLocaleString()
+            });
+
+            input.value = '';
+            saveData();
+            displayFeed();
+        }
+
+        function displayFeed() {
+            const feed = document.getElementById('feed');
+            const user = appData.users[appData.currentUser];
+            feed.innerHTML = '';
+
+            appData.posts.forEach(post => {
+                const author = appData.users[post.author];
+                const postDiv = document.createElement('div');
+                postDiv.className = 'post';
+
+                let mediaHTML = '';
+                if (post.media) {
+                    if (post.media.type === 'image') {
+                        mediaHTML = `<div class="post-media"><img src="${post.media.data}"></div>`;
+                    } else {
+                        mediaHTML = `<div class="post-media"><video src="${post.media.data}" controls></video></div>`;
+                    }
+                }
+
+                const likeActive = post.reactions.like.includes(appData.currentUser) ? 'active' : '';
+                const loveActive = post.reactions.love.includes(appData.currentUser) ? 'active' : '';
+                const hahaActive = post.reactions.haha.includes(appData.currentUser) ? 'active' : '';
+
+                let commentsHTML = post.comments.map(c => {
+                    const commenter = appData.users[c.author];
+                    return `
+                        <div class="comment">
+                            <img src="${commenter.avatar}" class="comment-avatar">
+                            <div class="comment-content">
+                                <div class="comment-author">${commenter.name}</div>
+                                <div class="comment-text">${c.text}</div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                postDiv.innerHTML = `
+                    <div class="post-header">
+                        <img src="${author.avatar}" class="post-avatar">
+                        <div class="post-info">
+                            <div class="post-author">${author.name}</div>
+                            <div class="post-date">${post.date}</div>
+                        </div>
+                    </div>
+                    <div class="post-content">${post.text}</div>
+                    ${mediaHTML}
+                    <div class="post-reactions">
+                        <button class="reaction-btn ${likeActive}" onclick="reactToPost(${post.id}, 'like')">
+                            👍 Like ${post.reactions.like.length > 0 ? post.reactions.like.length : ''}
+                        </button>
+                        <button class="reaction-btn ${loveActive}" onclick="reactToPost(${post.id}, 'love')">
+                            ❤️ Love ${post.reactions.love.length > 0 ? post.reactions.love.length : ''}
+                        </button>
+                        <button class="reaction-btn ${hahaActive}" onclick="reactToPost(${post.id}, 'haha')">
+                            😂 Haha ${post.reactions.haha.length > 0 ? post.reactions.haha.length : ''}
+                        </button>
+                    </div>
+                    <div class="comments">
+                        ${commentsHTML}
+                        <div class="comment-input">
+                            <img src="${user.avatar}" class="comment-avatar">
+                            <input type="text" id="comment-${post.id}" placeholder="Write a comment...">
+                            <button onclick="addComment(${post.id})" style="width:auto; padding:8px 16px;">Post</button>
+                        </div>
+                    </div>
+                `;
+
+                feed.appendChild(postDiv);
+            });
+        }
+
+        function displayFriends() {
+            const user = appData.users[appData.currentUser];
+            const friendsList = document.getElementById('friendsList');
+            const usersList = document.getElementById('usersList');
+
+            friendsList.innerHTML = '';
+            usersList.innerHTML = '';
+
+            user.friends.forEach(friendId => {
+                const friend = appData.users[friendId];
+                const div = document.createElement('div');
+                div.className = 'friend-item';
+                div.innerHTML = `
+                    <img src="${friend.avatar}" class="friend-avatar">
+                    <div class="friend-info">
+                        <strong>${friend.name}</strong>
+                    </div>
+                    <div class="friend-actions">
+                        <button onclick="startChat('${friendId}')">Message</button>
+                    </div>
+                `;
+                friendsList.appendChild(div);
+            });
+
+            Object.keys(appData.users).forEach(userId => {
+                if (userId !== appData.currentUser && !user.friends.includes(userId)) {
+                    const otherUser = appData.users[userId];
+                    const div = document.createElement('div');
+                    div.className = 'friend-item';
+                    div.innerHTML = `
+                        <img src="${otherUser.avatar}" class="friend-avatar">
+                        <div class="friend-info">
+                            <strong>${otherUser.name}</strong>
+                        </div>
+                        <div class="friend-actions">
+                            <button onclick="addFriend('${userId}')">Add Friend</button>
+                        </div>
+                    `;
+                    usersList.appendChild(div);
+                }
+            });
+        }
+
+        function addFriend(friendId) {
+            const user = appData.users[appData.currentUser];
+            const friend = appData.users[friendId];
+            
+            if (!user.friends.includes(friendId)) {
+                user.friends.push(friendId);
+                friend.friends.push(appData.currentUser);
+                saveData();
+                alert(`You are now friends with ${friend.name}!`);
+                displayFriends();
+            }
+        }
+
+        function startChat(friendId) {
+            const chatId = [appData.currentUser, friendId].sort().join('-');
+            let chat = appData.chats.find(c => c.id === chatId);
+            
+            if (!chat) {
+                const friend = appData.users[friendId];
+                chat = {
+                    id: chatId,
+                    type: 'private',
+                    members: [appData.currentUser, friendId],
+                    name: friend.name,
+                    messages: []
+                };
+                appData.chats.push(chat);
+                saveData();
+            }
+            
+            showPage('messages');
+            openChat(chatId);
+        }
+
+        function displayChats() {
+            const chatList = document.getElementById('chatList');
+            chatList.innerHTML = '';
+
+            appData.chats.forEach(chat => {
+                const div = document.createElement('div');
+                div.className = 'chat-item';
+                if (appData.currentChat === chat.id) {
+                    div.classList.add('active');
+                }
+
+                let chatName = chat.name;
+                let avatar = '';
+                
+                if (chat.type === 'private') {
+                    const otherId = chat.members.find(m => m !== appData.currentUser);
+                    const other = appData.users[otherId];
+                    chatName = other.name;
+                    avatar = other.avatar;
+                } else {
+                    avatar = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><circle cx="50" cy="50" r="50" fill="%2342b72a"/><text x="50" y="50" text-anchor="middle" dy=".3em" fill="white" font-size="40" font-family="Arial">👥</text></svg>';
+                }
+
+                const unread = chat.messages.filter(m => m.author !== appData.currentUser && !m.read).length;
+                const badge = unread > 0 ? `<span class="badge">${unread}</span>` : '';
+
+                div.innerHTML = `
+                    <img src="${avatar}" class="friend-avatar">
+                    <div class="friend-info">
+                        <strong>${chatName}</strong>${badge}
+                    </div>
+                `;
+                div.onclick = () => openChat(chat.id);
+                chatList.appendChild(div);
+            });
+
+            updateMessageBadge();
+        }
+
+        function updateMessageBadge() {
+            let totalUnread = 0;
+            appData.chats.forEach(chat => {
+                totalUnread += chat.messages.filter(m => m.author !== appData.currentUser && !m.read).length;
+            });
+            
+            const badge = document.getElementById('msgBadge');
+            if (totalUnread > 0) {
+                badge.innerHTML = `<span class="badge">${totalUnread}</span>`;
+            } else {
+                badge.innerHTML = '';
+            }
+        }
+
+        function openChat(chatId) {
+            appData.currentChat = chatId;
+            const chat = appData.chats.find(c => c.id === chatId);
+            
+            chat.messages.forEach(m => {
+                if (m.author !== appData.currentUser) {
+                    m.read = true;
+                }
+            });
+            saveData();
+
+            const header = document.getElementById('chatHeader');
+            const messages = document.getElementById('chatMessages');
+            const inputArea = document.getElementById('chatInputArea');
+
+            let chatName = chat.name;
+            if (chat.type === 'private') {
+                const otherId = chat.members.find(m => m !== appData.currentUser);
+                const other = appData.users[otherId];
+                chatName = other.name;
+            }
+
+            header.textContent = chatName;
+            inputArea.style.display = 'flex';
+
+            messages.innerHTML = '';
+            chat.messages.forEach(msg => {
+                const author = appData.users[msg.author];
+                const div = document.createElement('div');
+                div.className = 'message';
+                if (msg.author === appData.currentUser) {
+                    div.classList.add('own');
+                }
+
+                let mediaHTML = '';
+                if (msg.media) {
+                    if (msg.media.type === 'image') {
+                        mediaHTML = `<img src="${msg.media.data}" class="message-media">`;
+                    } else if (msg.media.type === 'video') {
+                        mediaHTML = `<video src="${msg.media.data}" controls class="message-media"></video>`;
+                    }
+                }
+
+                div.innerHTML = `
+                    ${msg.author !== appData.currentUser ? `<small>${author.name}</small>` : ''}
+                    <div class="message-bubble">${msg.text}</div>
+                    ${mediaHTML}
+                `;
+                messages.appendChild(div);
+            });
+
+            messages.scrollTop = messages.scrollHeight;
+            displayChats();
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            const fileInput = document.getElementById('chatFileInput');
+            
+            if (!text && !fileInput.files[0]) return;
+
+            const chat = appData.chats.find(c => c.id === appData.currentChat);
+            if (!chat) return;
+
+            if (fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const fileType = fileInput.files[0].type.startsWith('image') ? 'image' : 'video';
+                    chat.messages.push({
+                        author: appData.currentUser,
+                        text: text || '',
+                        media: { type: fileType, data: e.target.result },
+                        date: new Date().toLocaleString(),
+                        read: false
+                    });
+                    saveData();
+                    input.value = '';
+                    fileInput.value = '';
+                    openChat(appData.currentChat);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                chat.messages.push({
+                    author: appData.currentUser,
+                    text: text,
+                    media: null,
+                    date: new Date().toLocaleString(),
+                    read: false
+                });
+                saveData();
+                input.value = '';
+                openChat(appData.currentChat);
+            }
+        }
+
+        function handleChatFile(input) {
+            // File is handled in sendMessage
+        }
+
+        function showCreateGroupChat() {
+            const user = appData.users[appData.currentUser];
+            if (user.friends.length < 2) {
+                alert('You need at least 2 friends to create a group chat');
+                return;
+            }
+
+            const checkList = document.getElementById('friendCheckList');
+            checkList.innerHTML = '<p>Select friends to add:</p>';
+            
+            user.friends.forEach(friendId => {
+                const friend = appData.users[friendId];
+                const div = document.createElement('div');
+                div.innerHTML = `
+                    <label style="display:flex; align-items:center; padding:10px; cursor:pointer;">
+                        <input type="checkbox" value="${friendId}" style="margin-right:10px; width:auto;">
+                        <img src="${friend.avatar}" style="width:32px; height:32px; border-radius:50%; margin-right:10px;">
+                        ${friend.name}
+                    </label>
+                `;
+                checkList.appendChild(div);
+            });
+
+            document.getElementById('groupModal').style.display = 'flex';
+        }
+
+        function createGroupChat() {
+            const groupName = document.getElementById('groupName').value.trim();
+            const checkboxes = document.querySelectorAll('#friendCheckList input[type="checkbox"]:checked');
+            
+            if (!groupName) {
+                alert('Please enter a group name');
+                return;
+            }
+
+            if (checkboxes.length < 2) {
+                alert('Please select at least 2 friends');
+                return;
+            }
+
+            const members = [appData.currentUser];
+            checkboxes.forEach(cb => members.push(cb.value));
+
+            const chat = {
+                id: 'group-' + Date.now(),
+                type: 'group',
+                members: members,
+                name: groupName,
+                messages: []
+            };
+
+            appData.chats.push(chat);
+            saveData();
+            closeModal('groupModal');
+            showPage('messages');
+            openChat(chat.id);
+        }
+
+        function displayProfile() {
+            const user = appData.users[appData.currentUser];
+            document.getElementById('profileAvatar').src = user.avatar;
+            document.getElementById('profileName').textContent = user.name;
+            document.getElementById('profileBday').textContent = user.birthday;
+            document.getElementById('profileGender').textContent = user.gender;
+            document.getElementById('profileFriends').textContent = user.friends.length;
+        }
+
+        function showEditProfile() {
+            const user = appData.users[appData.currentUser];
+            document.getElementById('editName').value = user.name;
+            document.getElementById('editBday').value = user.birthday;
+            document.getElementById('editGender').value = user.gender;
+            document.getElementById('editModal').style.display = 'flex';
+        }
+
+        function previewAvatar(input) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('avatarPreview').src = e.target.result;
+                    document.getElementById('avatarPreview').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function saveProfile() {
+            const user = appData.users[appData.currentUser];
+            const newName = document.getElementById('editName').value.trim();
+            const avatarInput = document.getElementById('editAvatar');
+
+            if (!newName) {
+                alert('Name cannot be empty');
+                return;
+            }
+
+            user.name = newName;
+            user.birthday = document.getElementById('editBday').value;
+            user.gender = document.getElementById('editGender').value;
+
+            if (avatarInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    user.avatar = e.target.result;
+                    saveData();
+                    closeModal('editModal');
+                    displayProfile();
+                    document.getElementById('navAvatar').src = user.avatar;
+                };
+                reader.readAsDataURL(avatarInput.files[0]);
+            } else {
+                saveData();
+                closeModal('editModal');
+                displayProfile();
+            }
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        if (appData.currentUser) {
+            showApp();
+        }
+    </script>
+</body>
+</html>
